@@ -1,0 +1,177 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AMSA at NYU Membership</title>
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css?v=tiers-1" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="site-brand" href="index.html">
+        <span><strong>AMSA</strong> at NYU</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="index.html">About</a>
+        <a href="events.html">Events</a>
+        <a href="tiers.html">Tier System</a>
+        <a class="is-active" href="membership.html">Membership</a>
+        <a href="attendance.html">Attendance</a>
+      </nav>
+    </header>
+
+    <main class="page-shell">
+      <section class="hero" aria-label="AMSA membership sign up">
+        <img class="hero__image" src="assets/organic-chem-whiteboard-bright-hero.png" alt="" />
+        <div class="hero__shade"></div>
+        <div class="hero__content">
+          <div class="hero__brand-row" aria-label="AMSA and NYU">
+            <img class="hero__logo hero__logo--nyu" src="assets/nyu-logo.png" alt="NYU" />
+          </div>
+          <p class="eyebrow hero__club-name"><span>AMSA</span> at NYU</p>
+          <h1>Membership Access</h1>
+          <p class="hero__copy">
+            Join AMSA for free and build attendance toward Tier I. Submit the
+            one-time dues whenever you are ready to qualify for Tier II.
+          </p>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="Membership form and payment details">
+        <aside class="payment-panel">
+          <div>
+            <p class="section-kicker">Two ways to join</p>
+            <h2>Start free or submit $25 dues</h2>
+            <p>
+              Joining AMSA does not require payment. Attend three events after
+              joining to reach Tier I. To qualify for Tier II, attend three
+              events and submit the one-time $25 dues.
+              <strong class="required-note">If paying now, include your full name in the payment note so AMSA can match it.</strong>
+              Dues are reviewed before Tier II access is approved.
+            </p>
+          </div>
+
+          <div class="payment-methods">
+            <div class="payment-method">
+              <span>Venmo</span>
+              <strong id="venmoHandle">@edward_novodvorsky</strong>
+            </div>
+            <div class="payment-method">
+              <span>Zelle</span>
+              <strong id="zelleHandle">347-705-4391</strong>
+            </div>
+          </div>
+
+        </aside>
+
+        <form class="signup-form" id="signupForm">
+          <div class="form-header">
+            <p class="section-kicker">Student details</p>
+            <h2>Join or upgrade</h2>
+          </div>
+
+          <fieldset>
+            <legend>Membership path</legend>
+            <div class="segmented membership-path">
+              <label>
+                <input type="radio" name="membershipTrack" value="free" checked />
+                <span>Join free</span>
+              </label>
+              <label>
+                <input type="radio" name="membershipTrack" value="paid" />
+                <span>Join + submit dues</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <label>
+            <span>Full name</span>
+            <input
+              id="fullName"
+              name="fullName"
+              type="text"
+              autocomplete="name"
+              placeholder="Jane Doe"
+              required
+            />
+          </label>
+
+          <label>
+            <span>NYU email</span>
+            <input
+              id="email"
+              name="email"
+              type="email"
+              autocomplete="email"
+              placeholder="xyz234@nyu.edu"
+              pattern="^[A-Za-z0-9._%+-]+@nyu\.edu$"
+              required
+            />
+          </label>
+
+          <label>
+            <span>Phone number</span>
+            <input
+              id="phone"
+              name="phone"
+              type="tel"
+              autocomplete="tel"
+              placeholder="555-123-4567"
+              required
+            />
+          </label>
+
+          <fieldset class="payment-only" id="paymentFields" hidden>
+            <legend>Payment method</legend>
+            <div class="segmented">
+              <label>
+                <input type="radio" name="paymentMethod" value="Venmo" checked />
+                <span>Venmo</span>
+              </label>
+              <label>
+                <input type="radio" name="paymentMethod" value="Zelle" />
+                <span>Zelle</span>
+              </label>
+            </div>
+          </fieldset>
+
+          <label class="payment-only" id="paymentNoteField" hidden>
+            <span>Payment note or username</span>
+            <input
+              id="paymentNote"
+              name="paymentNote"
+              type="text"
+              placeholder="Use the same full name from your payment note"
+            />
+          </label>
+
+          <label class="check-row payment-only" id="paymentConfirmationField" hidden>
+            <input id="paymentSent" name="paymentSent" type="checkbox" />
+            <span><strong>✓ I have sent the one-time $25 payment and included my full name in the payment note.</strong></span>
+          </label>
+
+          <label class="check-row">
+            <input id="honestyPolicy" name="honestyPolicy" type="checkbox" required />
+            <span>I agree to follow the academic honesty policy.</span>
+          </label>
+
+          <button class="submit-button" type="submit">
+            <span id="membershipSubmitLabel">Join AMSA</span>
+          </button>
+
+          <p class="status" id="formStatus" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+    </main>
+
+    <script src="config.js"></script>
+    <script src="script.js?v=concurrency-1"></script>
+  </body>
+</html>
