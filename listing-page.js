@@ -16,13 +16,54 @@ function renderListingPage(options) {
     return;
   }
 
-  target.innerHTML = items.map((item) => renderListingCard(item, options.actionLabel)).join("");
+  target.innerHTML = items
+    .map((item) => renderListingCard(item, options.actionLabel, options.showLinks !== false))
+    .join("");
 }
 
-function renderListingCard(item, actionLabel) {
+function partitionListingItemsByDate(items, options = {}) {
+  const timeZone = options.timeZone || "America/New_York";
+  const now = options.now instanceof Date ? options.now : new Date();
+  const today = getDateKeyInTimeZone(now, timeZone);
+  const groups = { upcoming: [], past: [] };
+
+  (Array.isArray(items) ? items : []).forEach((item) => {
+    const endDate = typeof item.endDate === "string" ? item.endDate : "";
+    const destination = /^\d{4}-\d{2}-\d{2}$/.test(endDate) && endDate < today
+      ? groups.past
+      : groups.upcoming;
+
+    destination.push(item);
+  });
+
+  groups.upcoming.sort(compareEventDates);
+  groups.past.sort((first, second) => compareEventDates(second, first));
+
+  return groups;
+}
+
+function getDateKeyInTimeZone(date, timeZone) {
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit"
+  }).formatToParts(date);
+  const values = Object.fromEntries(parts.map((part) => [part.type, part.value]));
+
+  return `${values.year}-${values.month}-${values.day}`;
+}
+
+function compareEventDates(first, second) {
+  return String(first.endDate || "9999-12-31").localeCompare(
+    String(second.endDate || "9999-12-31")
+  );
+}
+
+function renderListingCard(item, actionLabel, showLink = true) {
   const meta = [item.date, item.time, item.location].filter(Boolean).join(" • ");
   const tags = Array.isArray(item.tags) ? item.tags : [];
-  const link = item.link
+  const link = showLink && item.link
     ? `<a class="card-link" href="${escapeAttribute(item.link)}" target="_blank" rel="noopener">${escapeHtml(actionLabel)}</a>`
     : "";
 

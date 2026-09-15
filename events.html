@@ -11,7 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=publication-1" />
+    <link rel="stylesheet" href="styles.css?v=events-archive-1" />
   </head>
   <body>
     <header class="site-header">
@@ -38,18 +38,44 @@
         </p>
       </section>
 
-      <section class="listing-grid" id="eventsList" aria-label="Events list"></section>
+      <section class="listing-section" aria-labelledby="upcomingEventsTitle">
+        <div class="listing-section__header">
+          <p class="section-kicker">Next up</p>
+          <h2 id="upcomingEventsTitle">Upcoming Events</h2>
+        </div>
+        <div class="listing-grid" id="upcomingEventsList" aria-label="Upcoming events"></div>
+      </section>
+
+      <section class="listing-section" aria-labelledby="pastEventsTitle">
+        <div class="listing-section__header">
+          <p class="section-kicker">Archive</p>
+          <h2 id="pastEventsTitle">Past Events</h2>
+        </div>
+        <div class="listing-grid" id="pastEventsList" aria-label="Past events"></div>
+      </section>
     </main>
 
-    <script src="data/events.js"></script>
-    <script src="listing-page.js"></script>
+    <script src="data/events.js?v=events-archive-1"></script>
+    <script src="listing-page.js?v=events-archive-1"></script>
     <script>
+      const eventGroups = partitionListingItemsByDate(window.AMSA_EVENTS, {
+        timeZone: "America/New_York"
+      });
+
       renderListingPage({
-        targetId: "eventsList",
-        items: window.AMSA_EVENTS,
-        emptyTitle: "No events yet",
+        targetId: "upcomingEventsList",
+        items: eventGroups.upcoming,
+        emptyTitle: "No upcoming events",
         emptyMessage: "Check back soon for upcoming AMSA at NYU events.",
         actionLabel: "Register"
+      });
+
+      renderListingPage({
+        targetId: "pastEventsList",
+        items: eventGroups.past,
+        emptyTitle: "No past events yet",
+        emptyMessage: "Completed AMSA at NYU events will appear here automatically.",
+        showLinks: false
       });
     </script>
   </body>

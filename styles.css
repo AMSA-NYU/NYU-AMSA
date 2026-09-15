@@ -735,6 +735,26 @@ fieldset {
   gap: 16px;
 }
 
+.listing-section + .listing-section {
+  margin-top: 48px;
+  padding-top: 40px;
+  border-top: 1px solid var(--line);
+}
+
+.listing-section__header {
+  margin-bottom: 18px;
+}
+
+.listing-section__header .section-kicker {
+  margin-bottom: 6px;
+}
+
+.listing-section__header h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: clamp(1.6rem, 3vw, 2.25rem);
+}
+
 .listing-card,
 .empty-state {
   min-height: 210px;
