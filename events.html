@@ -11,7 +11,7 @@
       href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
       rel="stylesheet"
     />
-    <link rel="stylesheet" href="styles.css?v=events-2" />
+    <link rel="stylesheet" href="styles.css?v=publication-1" />
   </head>
   <body>
     <header class="site-header">
@@ -21,6 +21,7 @@
       <nav class="site-nav" aria-label="Primary navigation">
         <a href="index.html">About</a>
         <a class="is-active" href="events.html">Events</a>
+        <a href="publication.html">Publication</a>
         <a href="tiers.html">Tier System</a>
         <a href="membership.html">Membership</a>
         <a href="attendance.html">Attendance</a>
@@ -37,19 +38,6 @@
         </p>
       </section>
 
-      <section class="directory-toolbar directory-toolbar--action" aria-label="Event sign-ups">
-        <div>
-          <p class="directory-toolbar__title">Ready for the next AMSA event?</p>
-          <p>View current event sign-ups, updates, and important links.</p>
-        </div>
-        <a
-          class="primary-link"
-          href="https://linktr.ee/rkp7618?utm_source=qr_code&amp;utm_medium=desktop_profile"
-          target="_blank"
-          rel="noopener noreferrer"
-        >View event sign-ups</a>
-      </section>
-
       <section class="listing-grid" id="eventsList" aria-label="Events list"></section>
     </main>
 
@@ -61,7 +49,7 @@
         items: window.AMSA_EVENTS,
         emptyTitle: "No events yet",
         emptyMessage: "Check back soon for upcoming AMSA at NYU events.",
-        actionLabel: "Details"
+        actionLabel: "Register"
       });
     </script>
   </body>

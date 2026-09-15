@@ -729,26 +729,6 @@ fieldset {
   font-weight: 700;
 }
 
-.directory-toolbar--action {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 20px;
-  padding: 18px 20px;
-}
-
-.directory-toolbar--action .directory-toolbar__title {
-  margin-bottom: 4px;
-  color: var(--ink);
-  font-size: 1.05rem;
-  font-weight: 800;
-}
-
-.directory-toolbar--action .primary-link {
-  flex: 0 0 auto;
-  margin-top: 0;
-}
-
 .listing-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -1089,6 +1069,151 @@ fieldset {
   background: #fff;
 }
 
+.publication-page {
+  min-height: calc(100vh - 72px);
+  padding: 64px 0 80px;
+  background:
+    linear-gradient(140deg, rgba(87, 6, 140, 0.12), transparent 34%),
+    linear-gradient(315deg, rgba(15, 118, 110, 0.11), transparent 34%),
+    #f7f7f5;
+}
+
+.publication-hero,
+.publication-content,
+.publication-cta {
+  width: min(1120px, calc(100% - 40px));
+  margin: 0 auto;
+}
+
+.publication-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.25fr) minmax(240px, 0.55fr);
+  gap: 48px;
+  align-items: center;
+  padding-bottom: 52px;
+}
+
+.publication-hero h1 {
+  max-width: 880px;
+  font-size: clamp(3rem, 7vw, 6.5rem);
+}
+
+.publication-hero > div > p:last-of-type {
+  max-width: 760px;
+  color: var(--muted);
+  font-size: 1.08rem;
+  line-height: 1.7;
+}
+
+.publication-mark {
+  aspect-ratio: 1;
+  display: grid;
+  place-content: center;
+  border: 10px solid rgba(15, 118, 110, 0.76);
+  border-radius: 50%;
+  color: #fff;
+  text-align: center;
+  background: linear-gradient(145deg, var(--violet), var(--violet-dark));
+  box-shadow: 0 28px 58px rgba(49, 0, 79, 0.24);
+}
+
+.publication-mark strong {
+  font-size: clamp(3.8rem, 8vw, 6.6rem);
+  line-height: 0.9;
+}
+
+.publication-mark span {
+  margin-top: 12px;
+  font-size: 0.78rem;
+  font-weight: 800;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.publication-content {
+  display: grid;
+  grid-template-columns: minmax(0, 1.3fr) minmax(270px, 0.7fr);
+  gap: 20px;
+}
+
+.publication-story,
+.publication-formats {
+  padding: 30px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: var(--shadow);
+}
+
+.publication-story h2,
+.publication-formats h2 {
+  font-size: clamp(1.7rem, 3vw, 2.45rem);
+}
+
+.publication-story p,
+.publication-formats p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.publication-story p:last-child {
+  margin-bottom: 0;
+}
+
+.publication-formats {
+  border-top: 8px solid var(--teal);
+}
+
+.publication-formats ul {
+  margin: 22px 0 0;
+  padding: 0;
+  display: grid;
+  gap: 11px;
+  list-style: none;
+}
+
+.publication-formats li {
+  padding: 11px 13px;
+  border-radius: 7px;
+  color: var(--violet-dark);
+  background: #f3ecf8;
+  font-weight: 800;
+}
+
+.publication-cta {
+  margin-top: 24px;
+  padding: 30px;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 30px;
+  align-items: center;
+  border-radius: 8px;
+  color: #fff;
+  background: linear-gradient(135deg, var(--violet-dark), var(--violet));
+  box-shadow: var(--shadow);
+}
+
+.publication-cta .section-kicker {
+  color: #d7f5f1;
+}
+
+.publication-cta h2 {
+  font-size: clamp(1.7rem, 3vw, 2.6rem);
+}
+
+.publication-cta p {
+  max-width: 760px;
+  margin-bottom: 0;
+  color: rgba(255, 255, 255, 0.84);
+  line-height: 1.65;
+}
+
+.publication-cta .primary-link {
+  margin-top: 0;
+  color: var(--violet);
+  background: #fff;
+}
+
 .listing-card {
   display: flex;
   flex-direction: column;
@@ -1161,7 +1286,7 @@ fieldset {
 
   .site-nav {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(6, minmax(0, 1fr));
   }
 
   .site-nav a {
@@ -1240,11 +1365,19 @@ fieldset {
   .tier-hero,
   .tier-grid,
   .tier-tracking,
-  .tier-cta {
+  .tier-cta,
+  .publication-hero,
+  .publication-content,
+  .publication-cta {
     grid-template-columns: 1fr;
   }
 
   .tier-hero__badge {
+    width: min(280px, 72vw);
+    margin: 0 auto;
+  }
+
+  .publication-mark {
     width: min(280px, 72vw);
     margin: 0 auto;
   }
@@ -1261,6 +1394,10 @@ fieldset {
     width: 100%;
   }
 
+  .publication-cta .primary-link {
+    width: 100%;
+  }
+
   .connect-links {
     justify-content: stretch;
   }
@@ -1269,14 +1406,6 @@ fieldset {
     width: 100%;
   }
 
-  .directory-toolbar--action {
-    align-items: stretch;
-    flex-direction: column;
-  }
-
-  .directory-toolbar--action .primary-link {
-    width: 100%;
-  }
 }
 
 @media (max-width: 480px) {
