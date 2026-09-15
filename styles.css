@@ -729,6 +729,26 @@ fieldset {
   font-weight: 700;
 }
 
+.directory-toolbar--action {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 18px 20px;
+}
+
+.directory-toolbar--action .directory-toolbar__title {
+  margin-bottom: 4px;
+  color: var(--ink);
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.directory-toolbar--action .primary-link {
+  flex: 0 0 auto;
+  margin-top: 0;
+}
+
 .listing-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
@@ -1246,6 +1266,15 @@ fieldset {
   }
 
   .secondary-link--light {
+    width: 100%;
+  }
+
+  .directory-toolbar--action {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .directory-toolbar--action .primary-link {
     width: 100%;
   }
 }
