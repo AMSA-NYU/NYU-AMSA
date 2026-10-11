@@ -6,8 +6,18 @@ window.AMSA_EVENTS = [
     time: "Time: TBD",
     location: "Location: TBD",
     description:
-      "Connect with fellow AMSA students through our Big/Little mentorship program. Bigs share their experience and guidance; Littles find support as they explore their pre-health path. Signup forms will be posted here soon.",
-    tags: ["Bigs", "Littles", "Pre-health", "Mentorship"]
+      "Connect with fellow AMSA students through our Big/Little mentorship program. Bigs share their experience and guidance; Littles find support as they explore their pre-health path. Choose your signup form below to share your interests and availability.",
+    tags: ["Bigs", "Littles", "Pre-health", "Mentorship"],
+    links: [
+      {
+        label: "Sign up as a Big",
+        url: "https://docs.google.com/forms/d/e/1FAIpQLSf21wSo0hnUifierc76m63DQ_-OK_HOqhqCvlwyvuvVgd2yOA/viewform"
+      },
+      {
+        label: "Sign up as a Little",
+        url: "https://docs.google.com/forms/d/e/1FAIpQLSf4sFi17RZXCtXsEtlfRq5acgxt9DWlveS88nZg3iKmYuwT5w/viewform"
+      }
+    ]
   },
   {
     title: "AMSA Welcome Event",
