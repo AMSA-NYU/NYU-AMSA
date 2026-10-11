@@ -1280,6 +1280,12 @@ fieldset {
   font-weight: 800;
 }
 
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
 .card-link {
   align-self: start;
   padding: 10px 12px;

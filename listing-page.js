@@ -63,8 +63,13 @@ function compareEventDates(first, second) {
 function renderListingCard(item, actionLabel, showLink = true) {
   const meta = [item.date, item.time, item.location].filter(Boolean).join(" • ");
   const tags = Array.isArray(item.tags) ? item.tags : [];
-  const link = showLink && item.link
-    ? `<a class="card-link" href="${escapeAttribute(item.link)}" target="_blank" rel="noopener">${escapeHtml(actionLabel)}</a>`
+  const actions = Array.isArray(item.links)
+    ? item.links
+    : item.link ? [{ url: item.link, label: actionLabel }] : [];
+  const link = showLink && actions.length
+    ? `<div class="card-actions">${actions.map((action) =>
+      `<a class="card-link" href="${escapeAttribute(action.url)}" target="_blank" rel="noopener">${escapeHtml(action.label || actionLabel || "Register")}</a>`
+    ).join("")}</div>`
     : "";
 
   return `
