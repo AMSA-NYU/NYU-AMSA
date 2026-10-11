@@ -1,5 +1,24 @@
 window.AMSA_EVENTS = [
   {
+    title: "Big/Little Event",
+    type: "Mentorship",
+    date: "Date: TBD",
+    time: "Time: TBD",
+    location: "Location: TBD",
+    description:
+      "Connect with fellow AMSA students through our Big/Little mentorship program. Bigs share their experience and guidance; Littles find support as they explore their pre-health path. Signup forms will be posted here soon.",
+    tags: ["Bigs", "Littles", "Pre-health", "Mentorship"]
+  },
+  {
+    title: "AMSA Welcome Event",
+    type: "Welcome Event",
+    date: "October 7, 2026",
+    endDate: "2026-10-07",
+    description:
+      "AMSA's welcome event brought students together to start the year and connect with the pre-health community.",
+    tags: ["Community", "Pre-health"]
+  },
+  {
     title: "Medical School Fair at NYU",
     type: "Medical School Fair",
     date: "September 22, 2026",
