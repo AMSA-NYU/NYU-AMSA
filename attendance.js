@@ -15,7 +15,7 @@ function setAttendanceStatus(message, type = "") {
 
 async function requestAttendance(payload) {
   const controller = new AbortController();
-  const timeout = window.setTimeout(() => controller.abort(), 35000);
+  const timeout = window.setTimeout(() => controller.abort(), 20000);
   const params = new URLSearchParams({
     action: "attendance",
     fullName: payload.fullName,
@@ -34,9 +34,18 @@ async function requestAttendance(payload) {
     );
 
     if (!response.ok) {
-      throw new Error("Attendance service could not be reached.");
+      const error = new Error("Attendance service could not be reached.");
+      error.retryable = response.status === 429 || response.status >= 500;
+      throw error;
     }
-    return await response.json();
+    try {
+      return await response.json();
+    } catch {
+      // Google can return an HTML quota page during a traffic burst.
+      const error = new Error("Attendance is temporarily busy.");
+      error.retryable = true;
+      throw error;
+    }
   } catch (error) {
     if (error.name === "AbortError") {
       throw new Error("Attendance check-in timed out.");
@@ -48,17 +57,20 @@ async function requestAttendance(payload) {
 }
 
 function isRetryableAttendanceError(error) {
-  return error.name === "AbortError" ||
+  if (error.retryable === false) return false;
+  return error.retryable || error.name === "TypeError" || error.name === "AbortError" ||
     /busy|lock|temporarily|timed out|could not be reached/i.test(error.message || "");
 }
 
 async function submitAttendance(payload) {
   let lastError;
 
-  for (let attempt = 0; attempt < 2; attempt += 1) {
+  // Spread a roomful of submissions before they reach the shared Google backend.
+  await new Promise((resolve) => window.setTimeout(resolve, Math.floor(Math.random() * 8000)));
+  for (let attempt = 0; attempt < 6; attempt += 1) {
     try {
       const response = await requestAttendance(payload);
-      if (response && !response.ok && /busy|lock|temporarily/i.test(response.error || "")) {
+      if (response && !response.ok && (response.retryable || /busy|lock|temporarily/i.test(response.error || ""))) {
         const busyError = new Error("Attendance is busy. Retrying your check-in...");
         busyError.name = "BusyError";
         throw busyError;
@@ -66,12 +78,12 @@ async function submitAttendance(payload) {
       return response;
     } catch (error) {
       lastError = error;
-      if (!isRetryableAttendanceError(error) || attempt === 1) {
+      if (!isRetryableAttendanceError(error) || attempt === 5) {
         throw error;
       }
       setAttendanceStatus("The room is checking in at once. Retrying securely...");
       await new Promise((resolve) => {
-        window.setTimeout(resolve, 500 + Math.floor(Math.random() * 700));
+        window.setTimeout(resolve, Math.min(20000, 1500 * (2 ** attempt)) + Math.floor(Math.random() * 4000));
       });
     }
   }
@@ -101,7 +113,7 @@ attendanceForm.addEventListener("submit", async (event) => {
 
   const button = attendanceForm.querySelector("button");
   button.disabled = true;
-  setAttendanceStatus("Checking the event code...");
+  setAttendanceStatus("Checking you in. Please keep this page open; busy events may take a moment...");
 
   try {
     if (!attendanceConfig.googleScriptUrl) {
@@ -119,7 +131,7 @@ attendanceForm.addEventListener("submit", async (event) => {
 
     if (response.duplicate) {
       setAttendanceStatus(
-        `You are already checked in for ${response.eventName}. ${response.confirmationEmailSent ? "Your confirmation email has been sent." : "Your confirmation email is pending."}`,
+        `You are already checked in for ${response.eventName}. ${response.confirmationEmailSent ? "Your confirmation email has been sent." : "Your confirmation email will arrive shortly; during busy events it may take a few minutes."}`,
         "success"
       );
       return;
@@ -127,7 +139,7 @@ attendanceForm.addEventListener("submit", async (event) => {
 
     attendanceForm.reset();
     setAttendanceStatus(
-      `Attendance recorded for ${response.eventName}. ${response.confirmationEmailSent ? "A confirmation email has been sent to your NYU email." : "Your confirmation email is pending; your attendance has been saved."}`,
+      `Attendance recorded for ${response.eventName}. ${response.confirmationEmailSent ? "A confirmation email has been sent to your NYU email." : "Your attendance is saved. Your confirmation email will arrive shortly; during busy events it may take a few minutes."}`,
       "success"
     );
   } catch (error) {
