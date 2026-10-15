@@ -71,6 +71,11 @@ function renderListingCard(item, actionLabel, showLink = true) {
       `<a class="card-link" href="${escapeAttribute(action.url)}" target="_blank" rel="noopener">${escapeHtml(action.label || actionLabel || "Register")}</a>`
     ).join("")}</div>`
     : "";
+  const registration = showLink && (item.registrationUrl || item.registrationPlaceholder)
+    ? item.registrationUrl
+      ? `<p class="event-registration"><strong>Required:</strong> <a class="card-link" href="${escapeAttribute(item.registrationUrl)}" target="_blank" rel="noopener">Engage Sign Up!</a></p>`
+      : `<p>${escapeHtml(item.registrationPlaceholder)}</p>`
+    : "";
 
   return `
     <article class="listing-card">
@@ -79,6 +84,7 @@ function renderListingCard(item, actionLabel, showLink = true) {
         <h2>${escapeHtml(item.title || "Untitled")}</h2>
         ${meta ? `<p class="card-meta">${escapeHtml(meta)}</p>` : ""}
         ${item.description ? `<p>${escapeHtml(item.description)}</p>` : ""}
+        ${registration}
       </div>
       ${tags.length ? `<div class="tag-row">${tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>` : ""}
       ${link}

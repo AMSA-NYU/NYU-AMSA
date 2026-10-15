@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Suggestions | AMSA at NYU</title>
+    <meta
+      name="description"
+      content="Suggest events, activities, and resources for AMSA at NYU."
+    />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css?v=release-20261015" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="site-brand" href="index.html">
+        <span><strong>AMSA</strong> at NYU</span>
+      </a>
+      <nav class="site-nav" aria-label="Primary navigation">
+        <a href="index.html">About</a>
+        <a href="events.html">Events</a>
+        <a href="publication.html">Resources</a>
+        <a href="tiers.html">Tiers</a>
+        <a href="membership.html">Membership</a>
+        <a href="attendance.html">Attendance</a>
+        <a class="is-active" href="suggestions.html">Suggestions</a>
+      </nav>
+    </header>
+
+    <main class="suggestions-page">
+      <section class="directory-hero">
+        <p class="section-kicker">Your ideas matter</p>
+        <h1>Suggestions</h1>
+        <p>What events would you love to see? What would you like to do, learn, or have AMSA offer? Share an idea and help shape our community.</p>
+      </section>
+      <form class="suggestion-form" id="suggestionForm">
+        <label for="suggestionCategory">What is your idea about?</label>
+        <select id="suggestionCategory" name="category" required>
+          <option value="Event">An event or speaker</option>
+          <option value="Activity">An activity or volunteering opportunity</option>
+          <option value="Resource">A resource or member benefit</option>
+          <option value="Other">Something else</option>
+        </select>
+        <label for="suggestionIdea">Your idea <span aria-hidden="true">*</span></label>
+        <textarea id="suggestionIdea" name="idea" rows="6" maxlength="2000" required placeholder="Tell us what you have in mind and why you’d like to see it."></textarea>
+        <label for="suggestionName">Name <span class="field-note">(optional)</span></label>
+        <input id="suggestionName" name="fullName" type="text" maxlength="120" autocomplete="name" />
+        <label for="suggestionEmail">NYU email <span class="field-note">(optional, if you’d like us to follow up)</span></label>
+        <input id="suggestionEmail" name="email" type="email" maxlength="254" autocomplete="email" placeholder="Your NYU email" />
+        <p class="field-note">You can submit without your name or email. Suggestions are reviewed by AMSA; submitting an idea doesn’t guarantee it will be offered.</p>
+        <button class="submit-button" type="submit">Share my idea</button>
+        <p class="status" id="suggestionStatus" role="status" aria-live="polite"></p>
+      </form>
+    </main>
+    <script src="config.js"></script>
+    <script src="suggestions.js?v=release-20261015"></script>
+  </body>
+</html>

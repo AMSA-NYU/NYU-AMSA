@@ -119,7 +119,7 @@ attendanceForm.addEventListener("submit", async (event) => {
 
     if (response.duplicate) {
       setAttendanceStatus(
-        `You are already checked in for ${response.eventName}.`,
+        `You are already checked in for ${response.eventName}. ${response.confirmationEmailSent ? "Your confirmation email has been sent." : "Your confirmation email is pending."}`,
         "success"
       );
       return;
@@ -127,7 +127,7 @@ attendanceForm.addEventListener("submit", async (event) => {
 
     attendanceForm.reset();
     setAttendanceStatus(
-      `Attendance recorded for ${response.eventName}. Thank you!`,
+      `Attendance recorded for ${response.eventName}. ${response.confirmationEmailSent ? "A confirmation email has been sent to your NYU email." : "Your confirmation email is pending; your attendance has been saved."}`,
       "success"
     );
   } catch (error) {
