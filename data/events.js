@@ -2,11 +2,13 @@ window.AMSA_EVENTS = [
   {
     title: "Big/Little Event",
     type: "Mentorship",
-    date: "Date: TBD",
-    time: "Time: TBD",
-    location: "Location: TBD",
+    date: "October 27, 2026",
+    endDate: "2026-10-27",
+    time: "6:30 PM - 9:00 PM",
+    location: "Silver Room 104",
+    registrationUrl: "https://engage.nyu.edu/event/12892255",
     description:
-      "Connect with fellow AMSA students through our Big/Little mentorship program. Bigs share their experience and guidance; Littles find support as they explore their pre-health path. Choose your signup form below to share your interests and availability.",
+      "Connect with fellow AMSA students through our Big/Little mentorship program. Bigs share their experience and guidance; Littles find support as they explore their pre-health path. Choose your signup form below to share your interests.",
     tags: ["Bigs", "Littles", "Pre-health", "Mentorship"],
     links: [
       {
@@ -18,6 +20,16 @@ window.AMSA_EVENTS = [
         url: "https://docs.google.com/forms/d/e/1FAIpQLSf4sFi17RZXCtXsEtlfRq5acgxt9DWlveS88nZg3iKmYuwT5w/viewform"
       }
     ]
+  },
+  {
+    title: "MJHS: Hospice Care & Volunteer Opportunities",
+    type: "Community & Volunteering",
+    date: "Date: TBD",
+    time: "Time: TBD",
+    location: "Location: TBD",
+    description:
+      "Join AMSA for a planned event with MJHS (Manhattan hospice service). Hear about who they are, the work they do, and opportunities to volunteer. All event details are TBD and will be shared once confirmed.",
+    tags: ["Hospice care", "Volunteering", "Community"]
   },
   {
     title: "AMSA Welcome Event",
