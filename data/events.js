@@ -18,6 +18,10 @@ window.AMSA_EVENTS = [
       {
         label: "Sign up as a Little",
         url: "https://docs.google.com/forms/d/e/1FAIpQLSf4sFi17RZXCtXsEtlfRq5acgxt9DWlveS88nZg3iKmYuwT5w/viewform"
+      },
+      {
+        label: "Submit Big/Little matching preferences (NYU sign-in)",
+        url: "https://docs.google.com/forms/d/e/1FAIpQLSe9s03F7xOfwKCbXY3L_8U5E4_2kYagbhGm7deQNvXtIB0C2Q/viewform"
       }
     ]
   },
