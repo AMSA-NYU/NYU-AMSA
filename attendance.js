@@ -2,6 +2,7 @@ const attendanceConfig = window.AMSA_CONFIG || {};
 const attendanceForm = document.querySelector("#attendanceForm");
 const attendanceStatus = document.querySelector("#attendanceStatus");
 const attendanceCode = document.querySelector("#attendanceCode");
+const attendanceEventId = document.body?.dataset.eventId || "";
 
 const codeFromLink = new URLSearchParams(window.location.search).get("code");
 if (codeFromLink) {
@@ -20,7 +21,8 @@ async function requestAttendance(payload) {
     action: "attendance",
     fullName: payload.fullName,
     email: payload.email,
-    eventCode: payload.eventCode
+    eventCode: payload.eventCode,
+    eventId: payload.eventId || ""
   });
 
   try {
@@ -101,7 +103,8 @@ attendanceForm.addEventListener("submit", async (event) => {
   const payload = {
     fullName: String(data.get("fullName") || "").trim(),
     email: String(data.get("email") || "").trim().toLowerCase(),
-    eventCode: String(data.get("eventCode") || "").trim().toUpperCase()
+    eventCode: String(data.get("eventCode") || "").trim().toUpperCase(),
+    eventId: attendanceEventId
   };
 
   if (!/^[A-Za-z0-9._%+-]+@nyu\.edu$/.test(payload.email)) {

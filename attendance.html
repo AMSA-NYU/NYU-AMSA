@@ -24,6 +24,15 @@
     </header>
 
     <main class="attendance-page">
+      <section class="listing-section" aria-labelledby="eventAttendanceHeading">
+        <div class="listing-section__header">
+          <p class="section-kicker">Choose your event</p>
+          <h2 id="eventAttendanceHeading">Attendance by event</h2>
+        </div>
+        <p>Open your event’s attendance page and enter its room code. Past-event corrections can be recorded by an AMSA officer.</p>
+        <div class="listing-grid" id="eventAttendanceList"></div>
+      </section>
+
       <section class="attendance-intro">
         <div>
           <p class="section-kicker">In-room check-in</p>
@@ -117,7 +126,20 @@
       </section>
     </main>
 
+    <script src="data/events.js?v=events-20261029c"></script>
+    <script src="listing-page.js?v=events-20261029c"></script>
+    <script>
+      const attendanceGroups = partitionListingItemsByDate(window.AMSA_EVENTS);
+      renderListingPage({
+        targetId: "eventAttendanceList",
+        items: [...attendanceGroups.upcoming, ...attendanceGroups.past].map((event) => ({
+          ...event, links: [], link: null, registrationUrl: null,
+          description: "Use this event’s attendance page with the room code provided by an officer."
+        })),
+        emptyTitle: "No events listed", emptyMessage: "Check back for upcoming AMSA events."
+      });
+    </script>
     <script src="config.js"></script>
-    <script src="attendance.js?v=attendance-20261029"></script>
+    <script src="attendance.js?v=events-20261029c"></script>
   </body>
 </html>
