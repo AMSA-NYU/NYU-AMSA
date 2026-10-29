@@ -28,8 +28,7 @@ window.AMSA_EVENTS = [
         "url": "https://docs.google.com/forms/d/e/1FAIpQLSe9s03F7xOfwKCbXY3L_8U5E4_2kYagbhGm7deQNvXtIB0C2Q/viewform"
       }
     ],
-    "id": "big-little-2026-10-27",
-    "attendanceUrl": "attendance-big-little-2026-10-27.html"
+    "id": "big-little-2026-10-27"
   },
   {
     "title": "MJHS: Hospice Care & Volunteer Opportunities",
@@ -44,7 +43,6 @@ window.AMSA_EVENTS = [
       "Community"
     ],
     "id": "mjhs-2026-11-03",
-    "attendanceUrl": "attendance-mjhs-2026-11-03.html",
     "endDate": "2026-11-03",
     "registrationUrl": "https://engage.nyu.edu/event/12929496"
   },
@@ -58,8 +56,7 @@ window.AMSA_EVENTS = [
       "Community",
       "Pre-health"
     ],
-    "id": "welcome-2026-10-07",
-    "attendanceUrl": "attendance-welcome-2026-10-07.html"
+    "id": "welcome-2026-10-07"
   },
   {
     "title": "Medical School Fair at NYU",
@@ -75,8 +72,7 @@ window.AMSA_EVENTS = [
       "International"
     ],
     "link": "https://imsfevent.com/event/new-york-medical-school-fair-2026/",
-    "id": "medical-school-fair-2026-09-22",
-    "attendanceUrl": "attendance-medical-school-fair-2026-09-22.html"
+    "id": "medical-school-fair-2026-09-22"
   },
   {
     "title": "Clinical Skills Workshop: Suturing",
@@ -92,7 +88,6 @@ window.AMSA_EVENTS = [
       "Certificate"
     ],
     "link": "https://docs.google.com/forms/d/e/1FAIpQLSc0EMfBfESJLh-QuNZ_GT8D6NcP8hfcFa44K3g5JPt7N7sUXQ/viewform?usp=header",
-    "id": "suturing-2026-09-22",
-    "attendanceUrl": "attendance-suturing-2026-09-22.html"
+    "id": "suturing-2026-09-22"
   }
 ];
