@@ -65,9 +65,7 @@ function isRetryableAttendanceError(error) {
 async function submitAttendance(payload) {
   let lastError;
 
-  // Spread a roomful of submissions before they reach the shared Google backend.
-  await new Promise((resolve) => window.setTimeout(resolve, Math.floor(Math.random() * 8000)));
-  for (let attempt = 0; attempt < 6; attempt += 1) {
+  for (let attempt = 0; attempt < 8; attempt += 1) {
     try {
       const response = await requestAttendance(payload);
       if (response && !response.ok && (response.retryable || /busy|lock|temporarily/i.test(response.error || ""))) {
@@ -78,12 +76,12 @@ async function submitAttendance(payload) {
       return response;
     } catch (error) {
       lastError = error;
-      if (!isRetryableAttendanceError(error) || attempt === 5) {
+      if (!isRetryableAttendanceError(error) || attempt === 7) {
         throw error;
       }
       setAttendanceStatus("The room is checking in at once. Retrying securely...");
       await new Promise((resolve) => {
-        window.setTimeout(resolve, Math.min(20000, 1500 * (2 ** attempt)) + Math.floor(Math.random() * 4000));
+        window.setTimeout(resolve, Math.min(15000, 1000 * (2 ** attempt)) + Math.floor(Math.random() * 3000));
       });
     }
   }
