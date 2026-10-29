@@ -88,7 +88,6 @@ function renderListingCard(item, actionLabel, showLink = true) {
       </div>
       ${tags.length ? `<div class="tag-row">${tags.map((tag) => `<span>${escapeHtml(tag)}</span>`).join("")}</div>` : ""}
       ${link}
-      ${item.attendanceUrl ? `<p><a class="card-link" href="${escapeAttribute(item.attendanceUrl)}">Event attendance</a></p>` : ""}
     </article>
   `;
 }
