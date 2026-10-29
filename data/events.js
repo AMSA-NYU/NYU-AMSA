@@ -29,10 +29,10 @@ window.AMSA_EVENTS = [
     title: "MJHS: Hospice Care & Volunteer Opportunities",
     type: "Community & Volunteering",
     date: "Date: TBD",
-    time: "Time: TBD",
-    location: "Location: TBD",
+    time: "6:30 PM",
+    location: "Silver Room 104",
     description:
-      "Join AMSA for a planned event with MJHS (Manhattan hospice service). Hear about who they are, the work they do, and opportunities to volunteer. All event details are TBD and will be shared once confirmed.",
+      "Join AMSA for a planned event with MJHS (Manhattan hospice service). Hear about who they are, the work they do, and opportunities to volunteer. Meet in Silver Room 104 at 6:30 PM. The date and remaining details will be shared once confirmed.",
     tags: ["Hospice care", "Volunteering", "Community"]
   },
   {
