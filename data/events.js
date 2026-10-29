@@ -45,7 +45,8 @@ window.AMSA_EVENTS = [
     ],
     "id": "mjhs-2026-11-03",
     "attendanceUrl": "attendance-mjhs-2026-11-03.html",
-    "endDate": "2026-11-03"
+    "endDate": "2026-11-03",
+    "registrationUrl": "https://engage.nyu.edu/event/12929496"
   },
   {
     "title": "AMSA Welcome Event",
