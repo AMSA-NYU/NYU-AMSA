@@ -14,9 +14,19 @@ function setAttendanceStatus(message, type = "") {
   attendanceStatus.className = `status${type ? ` is-${type}` : ""}`;
 }
 
-async function requestAttendance(payload) {
+const attendanceSubmissionLimitMs = 25000;
+const attendanceRequestLimitMs = 8000;
+let attendanceSubmitting = false;
+
+function attendanceConfirmationTimeout() {
+  const error = new Error("We couldn’t confirm your check-in within 25 seconds. It may already be saved. Your details are still here—try again, or ask an officer to add your attendance manually. Retrying won’t count twice.");
+  error.name = "AttendanceConfirmationTimeoutError";
+  error.retryable = false;
+  return error;
+}
+
+async function requestAttendance(payload, submissionSignal) {
   const controller = new AbortController();
-  const timeout = window.setTimeout(() => controller.abort(), 20000);
   const params = new URLSearchParams({
     action: "attendance",
     fullName: payload.fullName,
@@ -24,37 +34,48 @@ async function requestAttendance(payload) {
     eventCode: payload.eventCode,
     eventId: payload.eventId || ""
   });
+  let timer;
+  let onAbort;
+  const deadline = new Promise((resolve, reject) => {
+    timer = window.setTimeout(() => {
+      controller.abort();
+      const error = new Error("Attendance confirmation timed out.");
+      error.retryable = true;
+      reject(error);
+    }, attendanceRequestLimitMs);
+    onAbort = () => { controller.abort(); reject(attendanceConfirmationTimeout()); };
+    if (submissionSignal?.aborted) onAbort();
+    else submissionSignal?.addEventListener("abort", onAbort, { once: true });
+  });
 
-  try {
-    const response = await fetch(
-      `${attendanceConfig.googleScriptUrl}?${params.toString()}`,
-      {
-        method: "GET",
-        cache: "no-store",
-        signal: controller.signal
-      }
-    );
-
+  const request = (async () => {
+    const response = await fetch(`${attendanceConfig.googleScriptUrl}?${params.toString()}`, {
+      method: "GET", cache: "no-store", credentials: "omit", signal: controller.signal
+    });
     if (!response.ok) {
       const error = new Error("Attendance service could not be reached.");
       error.retryable = response.status === 429 || response.status >= 500;
       throw error;
     }
     try {
-      return await response.json();
+      const result = await response.json();
+      if (!result || typeof result.ok !== "boolean") throw new Error("Invalid service response");
+      return result;
     } catch {
-      // Google can return an HTML quota page during a traffic burst.
+      // Quota/sign-in pages are HTML, not a check-in acknowledgement.
       const error = new Error("Attendance is temporarily busy.");
       error.retryable = true;
       throw error;
     }
-  } catch (error) {
-    if (error.name === "AbortError") {
-      throw new Error("Attendance check-in timed out.");
-    }
-    throw error;
+  })();
+
+  try {
+    // A stalled response body must not leave the submit button spinning forever.
+    return await Promise.race([request, deadline]);
   } finally {
-    window.clearTimeout(timeout);
+    window.clearTimeout(timer);
+    submissionSignal?.removeEventListener("abort", onAbort);
+    controller.abort();
   }
 }
 
@@ -64,35 +85,60 @@ function isRetryableAttendanceError(error) {
     /busy|lock|temporarily|timed out|could not be reached/i.test(error.message || "");
 }
 
-async function submitAttendance(payload) {
-  let lastError;
+function waitForAttendanceRetry(delay, signal) {
+  return new Promise((resolve, reject) => {
+    if (signal.aborted) { reject(attendanceConfirmationTimeout()); return; }
+    const onAbort = () => { window.clearTimeout(timer); reject(attendanceConfirmationTimeout()); };
+    const timer = window.setTimeout(() => {
+      signal.removeEventListener("abort", onAbort); resolve();
+    }, delay);
+    signal.addEventListener("abort", onAbort, { once: true });
+  });
+}
 
-  for (let attempt = 0; attempt < 8; attempt += 1) {
+async function performAttendanceSubmission(payload, signal) {
+  for (let attempt = 0; attempt < 4; attempt += 1) {
+    if (signal.aborted) throw attendanceConfirmationTimeout();
     try {
-      const response = await requestAttendance(payload);
+      const response = await requestAttendance(payload, signal);
       if (response && !response.ok && (response.retryable || /busy|lock|temporarily/i.test(response.error || ""))) {
-        const busyError = new Error("Attendance is busy. Retrying your check-in...");
-        busyError.name = "BusyError";
-        throw busyError;
+        const error = new Error("Attendance is temporarily busy.");
+        error.retryable = true;
+        throw error;
       }
       return response;
     } catch (error) {
-      lastError = error;
-      if (!isRetryableAttendanceError(error) || attempt === 7) {
-        throw error;
-      }
-      setAttendanceStatus("The room is checking in at once. Retrying securely...");
-      await new Promise((resolve) => {
-        window.setTimeout(resolve, Math.min(15000, 1000 * (2 ** attempt)) + Math.floor(Math.random() * 3000));
-      });
+      if (signal.aborted) throw attendanceConfirmationTimeout();
+      if (!isRetryableAttendanceError(error) || attempt === 3) throw error;
+      setAttendanceStatus(`Waiting for the attendance service. Retrying (${attempt + 2} of 4)… Your details are kept here.`);
+      await waitForAttendanceRetry(Math.min(4000, 500 * (2 ** attempt)) + Math.floor(Math.random() * 2500), signal);
     }
   }
+}
 
-  throw lastError;
+async function submitAttendance(payload) {
+  if (window.navigator?.onLine === false) {
+    const error = new Error("You’re offline. Reconnect and submit again; your details are still here.");
+    error.retryable = false;
+    throw error;
+  }
+  const controller = new AbortController();
+  let timer;
+  const deadline = new Promise((resolve, reject) => {
+    timer = window.setTimeout(() => { controller.abort(); reject(attendanceConfirmationTimeout()); }, attendanceSubmissionLimitMs);
+  });
+  try {
+    // The TOTAL deadline includes every request, response body, and retry delay.
+    return await Promise.race([performAttendanceSubmission(payload, controller.signal), deadline]);
+  } finally {
+    window.clearTimeout(timer);
+    controller.abort();
+  }
 }
 
 attendanceForm.addEventListener("submit", async (event) => {
   event.preventDefault();
+  if (attendanceSubmitting) return;
 
   if (!attendanceForm.checkValidity()) {
     attendanceForm.reportValidity();
@@ -113,8 +159,12 @@ attendanceForm.addEventListener("submit", async (event) => {
   }
 
   const button = attendanceForm.querySelector("button");
+  attendanceSubmitting = true;
   button.disabled = true;
-  setAttendanceStatus("Checking you in. Please keep this page open; busy events may take a moment...");
+  setAttendanceStatus("Sending your check-in…");
+  const progressTimer = window.setTimeout(() => {
+    if (attendanceSubmitting) setAttendanceStatus("Still waiting for confirmation from the attendance service. Your details are kept here; this attempt will stop within 25 seconds.");
+  }, 5000);
 
   try {
     if (!attendanceConfig.googleScriptUrl) {
@@ -146,10 +196,14 @@ attendanceForm.addEventListener("submit", async (event) => {
   } catch (error) {
     console.error(error);
     setAttendanceStatus(
-      error.message || "Check-in failed. Confirm the room code and try again.",
+      isRetryableAttendanceError(error)
+        ? "We couldn’t confirm the response. Your check-in may already be saved. Your details are still here—retry, or ask an officer to add you manually. Retrying won’t count twice."
+        : error.message || "Check-in failed. Confirm the room code and try again.",
       "error"
     );
   } finally {
+    window.clearTimeout(progressTimer);
+    attendanceSubmitting = false;
     button.disabled = false;
   }
 });
